@@ -1,0 +1,12 @@
+---
+description: Alpha模拟场产品入口与架构约定
+alwaysApply: true
+---
+
+# 产品入口（勿混淆）
+
+- **简易主页**：启动后端后打开 http://localhost:8000（`app/static/index.html` 单页）
+- **完整前端**（可选）：Next.js `apps/web` → http://localhost:3000
+- **后端**：`apps.api.alpha_sim.main:app`，不是 `app.main:app`
+
+核心闭环：策略工厂 → 回测 → 虚拟模拟盘 → 榜单。前端 API 失败时**显式报错**，禁止静默 fallback 假数据。

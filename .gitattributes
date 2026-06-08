@@ -1,0 +1,2 @@
+# 禁用参考项目内嵌的 Git LFS 规则，避免缺失 LFS 对象导致 push 失败
+* -filter -diff -merge

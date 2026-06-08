@@ -1,0 +1,9 @@
+# Project-level Codex config for AI投资想法体检器.
+# Project-local config loads only after this project is trusted by Codex.
+
+approval_policy = "on-request"
+project_doc_fallback_filenames = ["AGENTS.md", "README.md", "docs/current/P0_ACCEPTANCE.md", "docs/current/CURRENT_MVP.md"]
+project_doc_max_bytes = 65536
+
+# Keep global/user Codex config in the user profile. This project file only
+# documents repo-specific preferences and must not assume every command is safe.

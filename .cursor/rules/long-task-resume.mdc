@@ -1,0 +1,41 @@
+---
+description: Alpha模拟场长任务续跑与验收协议
+alwaysApply: true
+---
+
+# Alpha模拟场 · 长任务续跑
+
+> 全局纪律见 `~/.cursor/rules/must-complete-task.mdc`（必须完成用户任务，中途不得停止）。
+
+## 执行纪律
+
+- 多步计划：**连续执行全部 todo**，完成前不收尾。
+- 中断恢复：先 `py -3 -m pytest tests/ -q`，再从未完成项继续。
+- 完成标准：32+ 测试通过 + 可演示路径（首页榜单 / 策略实验室 / 标的研报）。
+
+## 架构速查
+
+| 用途 | 路径 |
+|------|------|
+| 简易前端 | `app/static/`（随 API 在 :8000 提供） |
+| 完整前端 | `apps/web/app/` |
+| 统一 API | `apps/api/alpha_sim/main.py` |
+| 业务服务 | `app/services/` |
+| 行情 P0 | `app/providers/live_market.py` |
+| 持久化 | `data/alpha_sim.db` |
+
+## 启动
+
+```powershell
+# 一条命令：API + 单页前端 → http://localhost:8000
+py -3 -m uvicorn apps.api.alpha_sim.main:app --reload --port 8000
+
+# 可选：完整 Next.js 前端 → http://localhost:3000
+cd apps\web; npm run dev
+```
+
+## 续跑口令
+
+```
+继续 Alpha 补救计划。不编辑 plan。做完所有 todo 再停。先 pytest。
+```

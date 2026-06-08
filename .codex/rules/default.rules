@@ -1,0 +1,89 @@
+# Rules for AI投资想法体检器 Codex work.
+# Project-local rules load only after the project .codex layer is trusted.
+
+prefix_rule(
+    pattern = ["git", "status"],
+    decision = "allow",
+    justification = "Reading git status is safe and useful.",
+    match = ["git status"],
+)
+
+prefix_rule(
+    pattern = ["py", "-3", "-m", "pytest"],
+    decision = "allow",
+    justification = "Running tests is required for validation.",
+    match = ["py -3 -m pytest tests/ -q"],
+)
+
+prefix_rule(
+    pattern = ["py", "-3", "-m", "uvicorn"],
+    decision = "allow",
+    justification = "Starting the local FastAPI app is required for manual validation.",
+    match = ["py -3 -m uvicorn apps.api.alpha_sim.main:app --reload --port 8000"],
+)
+
+prefix_rule(
+    pattern = ["py", "-3", "-m", "pytest", "tests/test_idea_diagnosis_api.py", "-q"],
+    decision = "allow",
+    justification = "Idea diagnosis contract tests are core MVP validation.",
+    match = ["py -3 -m pytest tests/test_idea_diagnosis_api.py -q"],
+)
+
+prefix_rule(
+    pattern = ["py", "-3", "-m", "pip", "install"],
+    decision = "prompt",
+    justification = "Dependency installation can change the environment and must be reviewed.",
+    match = ["py -3 -m pip install -r requirements.txt"],
+)
+
+prefix_rule(
+    pattern = ["Remove-Item"],
+    decision = "prompt",
+    justification = "File deletion requires review.",
+    match = ["Remove-Item file.txt"],
+)
+
+prefix_rule(
+    pattern = ["rm", "-rf"],
+    decision = "prompt",
+    justification = "Recursive deletion is dangerous and requires review.",
+    match = ["rm -rf build"],
+)
+
+# Modifying apps/web requires review — P2/future, not current P0 MVP.
+prefix_rule(
+    pattern = ["apps", "web"],
+    decision = "prompt",
+    justification = "apps/web is P2/future and must not affect the current P0 static homepage.",
+    match = ["apps/web"],
+)
+
+# Product docs must stay aligned with P0 acceptance criteria.
+prefix_rule(
+    pattern = ["docs", "current"],
+    decision = "prompt",
+    justification = "Changes to docs/current require syncing docs/current/P0_ACCEPTANCE.md.",
+    match = ["docs/current/P0_ACCEPTANCE.md"],
+)
+
+prefix_rule(
+    pattern = ["AGENTS.md"],
+    decision = "prompt",
+    justification = "Changes to AGENTS.md require syncing docs/current/P0_ACCEPTANCE.md.",
+    match = ["AGENTS.md"],
+)
+
+prefix_rule(
+    pattern = ["README.md"],
+    decision = "prompt",
+    justification = "Changes to README.md require syncing docs/current/P0_ACCEPTANCE.md.",
+    match = ["README.md"],
+)
+
+# Financial copy changes require compliance review.
+prefix_rule(
+    pattern = ["compliance_guard"],
+    decision = "prompt",
+    justification = "Financial copy or API response changes require running the compliance-guard skill.",
+    match = ["app/services/compliance_guard.py"],
+)

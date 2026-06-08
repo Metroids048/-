@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>AI投资想法体检器</title>
+    <link rel="stylesheet" href="/static/styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="site-header">
+        <div class="brand">
+          <span class="brand-mark">检</span>
+          <div>
+            <p class="brand-kicker">AI投资想法体检器</p>
+            <h1 id="targetUser">看到热点想买？先让 AI 体检一下。</h1>
+          </div>
+        </div>
+        <p class="hero-subtitle" id="heroPromise">
+          输入一句投资想法，生成虚拟回放、风险反例、小白提醒和可分享内容。
+          不荐股、不跟单、不接真实资金、不提供买卖建议。
+        </p>
+      </header>
+
+      <main>
+        <div id="pageState" class="page-state" aria-live="polite"></div>
+
+        <section class="panel idea-input-panel" id="ideaInputPanel">
+          <div class="section-head">
+            <div>
+              <p class="kicker">投资想法输入</p>
+              <h2>你现在想买什么？为什么？</h2>
+            </div>
+          </div>
+          <textarea
+            id="ideaInput"
+            rows="4"
+            placeholder="我想追 AI ETF，因为最近放量上涨，感觉还会继续涨。"
+          ></textarea>
+          <div class="symbol-context">
+            <label for="assetSymbol">可选：关联代码</label>
+            <input id="assetSymbol" type="text" inputmode="latin" placeholder="510300 / 159915 / 600000" />
+            <p>代码只作为体检上下文；当前页不展示完整行情，也不生成操作指令。</p>
+          </div>
+          <div class="button-row">
+            <button id="diagnoseIdea" class="btn-primary" type="button">生成想法体检卡</button>
+          </div>
+        </section>
+
+        <section class="panel diagnosis-panel hidden" id="diagnosisCard" aria-labelledby="diagnosisTitle">
+          <div class="section-head">
+            <div>
+              <p class="kicker">想法体检卡</p>
+              <h2 id="diagnosisTitle">体检结果</h2>
+            </div>
+            <span class="replay-badge" id="replayTypeBadge">虚拟样本回放</span>
+          </div>
+
+          <div class="diagnosis-meta">
+            <div class="meta-item">
+              <span class="meta-label">想法类型</span>
+              <strong id="ideaType">-</strong>
+            </div>
+            <div class="meta-item">
+              <span class="meta-label">情绪标签</span>
+              <strong id="emotionTag">-</strong>
+            </div>
+          </div>
+
+          <div class="diagnosis-block">
+            <h3>AI 体检结论</h3>
+            <p id="diagnosisSummary"></p>
+            <p class="diagnosis-lens" id="diagnosisLens"></p>
+            <p class="diagnosis-basis" id="diagnosisBasis"></p>
+          </div>
+
+          <div class="diagnosis-block" id="historicalReplay">
+            <h3>虚拟样本回放</h3>
+            <p class="replay-note" id="replayNote">以下为虚拟/示例样本回放，非真实历史统计，不代表未来表现。</p>
+            <div class="replay-grid">
+              <article>
+                <span>类似场景</span>
+                <strong id="replaySimilar">-</strong>
+              </article>
+              <article>
+                <span>中位表现</span>
+                <strong id="replayMedian">-</strong>
+              </article>
+              <article>
+                <span>最差样本</span>
+                <strong id="replayWorst">-</strong>
+              </article>
+              <article>
+                <span>最大回撤</span>
+                <strong id="replayDrawdown">-</strong>
+              </article>
+            </div>
+          </div>
+
+          <div class="diagnosis-block">
+            <h3>风险反例</h3>
+            <ul id="riskFlagList"></ul>
+            <ul id="failureCaseList" class="failure-list"></ul>
+          </div>
+
+          <div class="diagnosis-block reminder-block">
+            <h3>小白提醒</h3>
+            <p id="xiaobaiReminder"></p>
+          </div>
+
+          <p class="card-disclaimer" id="cardDisclaimer"></p>
+        </section>
+
+        <section class="panel trending-panel" id="trendingIdeas">
+          <div class="section-head">
+            <div>
+              <p class="kicker">今日热点体检榜</p>
+              <h2>上头榜 · 追高风险 · 抄底冲动 · 题材幻想 · 亏损复盘</h2>
+            </div>
+          </div>
+          <div id="trendingIdeaList" class="trending-list"></div>
+        </section>
+
+        <section class="panel content-panel hidden" id="contentGenerator">
+          <div class="section-head">
+            <div>
+              <p class="kicker">内容生成</p>
+              <h2>生成可分享内容</h2>
+            </div>
+          </div>
+          <div class="platform-tabs" role="tablist">
+            <button type="button" class="platform-tab active" data-platform="xiaohongshu">小红书</button>
+            <button type="button" class="platform-tab" data-platform="short_video">短视频</button>
+            <button type="button" class="platform-tab" data-platform="wechat">公众号</button>
+          </div>
+          <div class="button-row">
+            <button id="generateShareContent" class="btn-primary" type="button">生成分享文案</button>
+            <button id="copyShareContent" class="btn-secondary" type="button">复制分享文案</button>
+          </div>
+          <div class="share-output">
+            <h3>标题候选</h3>
+            <ul id="shareTitleList"></ul>
+            <h3>正文</h3>
+            <p id="shareBody"></p>
+            <h3>短视频脚本</h3>
+            <div id="shortVideoScript" class="script-block"></div>
+          </div>
+        </section>
+      </main>
+
+      <footer class="compliance-footer" id="complianceFooter">
+        <p>
+          本工具仅用于投资想法复盘、虚拟样本回放和内容生成。
+          不构成投资建议，不提供买入、卖出、目标价、收益承诺、跟单或代客理财服务。
+          不接真实资金。
+        </p>
+      </footer>
+    </div>
+    <script src="/static/app.js"></script>
+  </body>
+</html>
